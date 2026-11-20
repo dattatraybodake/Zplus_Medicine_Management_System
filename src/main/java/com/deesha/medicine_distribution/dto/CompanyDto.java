@@ -121,40 +121,28 @@ import java.time.LocalDateTime;
 
         // ---------- Bank account ----------
         public record BankAccountRequest(
-                Long bankAccountId,
-
-                @NotBlank
-                @Size(max = 90)
-                String bankName,
-
-                @NotBlank
-                @Size(max = 90)
-                String accountName,
-
+                @NotBlank @Size(max = 90) String bankName,
+                @NotBlank @Size(max = 90) String accountName,
                 @NotBlank
                 @Pattern(regexp = "^[0-9]{9,18}$", message = "Account number must be 9-18 digits")
                 String accountNumber,
-
                 @NotBlank
                 @Pattern(regexp = "^[A-Z]{4}0[A-Z0-9]{6}$", message = "Invalid IFSC")
                 String ifscCode,
-
-                @Size(max = 90)
-                String branchName,
-
+                @Size(max = 90) String branchName,
                 Boolean isActive
         ) {}
 
-        public record BankAccountResponse(
-                Long bankAccountId,
-                ManufactureCompany companyId,
-                String bankName,
-                String accountName,
-                String accountNumber,
-                String ifscCode,
-                String branchName,
-                Boolean isActive
-        ) {}
+            public record BankAccountResponse(
+                    Long bankAccountId,
+                    Long companyId,
+                    String bankName,
+                    String accountName,
+                    String accountNumber,
+                    String ifscCode,
+                    String branchName,
+                    Boolean isActive
+            ) {}
 
         // ---------- License ----------
         public record LicenseRequest(
@@ -203,78 +191,78 @@ import java.time.LocalDateTime;
                     String categoryName
             ) {}
 
-        // ---------- Medicine ----------
-        public record MedicineRequest(
-                @NotBlank
-                @Size(max = 255)
-                String medicineName,
 
-                @Size(max = 255)
-                String brandName,
+            // ---------- Medicine ----------
+            public record MedicineRequest(
+                    @NotBlank
+                    @Size(max = 255)
+                    String medicineName,
 
-                @Size(max = 100)
-                String medicineType,
+                    @Size(max = 255)
+                    String brandName,
 
-                @Size(max = 255)
-                String preciseGenericName,
+                    @Size(max = 100)
+                    String medicineType,
 
-                @Size(max = 255)
-                String commercialBrandName,
+                    @Size(max = 255)
+                    String preciseGenericName,
 
-                @NotNull
-                @DecimalMin(value = "0.0", inclusive = false)
-                @Digits(integer = 10, fraction = 2)
-                BigDecimal price,
+                    @Size(max = 255)
+                    String commercialBrandName,
 
-                @Size(max = 50)
-                String unitOfMeasure,
+                    @NotNull
+                    @DecimalMin(value = "0.0", inclusive = false)
+                    @Digits(integer = 10, fraction = 2)
+                    BigDecimal price,
 
-                @Size(max = 100)
-                String taxCategory,
+                    @Size(max = 50)
+                    String unitOfMeasure,
 
-                @DecimalMin("0.0")
-                @DecimalMax("100.0")
-                @Digits(integer = 3, fraction = 2)
-                BigDecimal gstPercent,
+                    @Size(max = 100)
+                    String taxCategory,
 
-                @Min(0)
-                Integer totalQuantity,
+                    @DecimalMin("0.0")
+                    @DecimalMax("100.0")
+                    @Digits(integer = 3, fraction = 2)
+                    BigDecimal gstPercent,
 
-                Integer typesId,
+                    @Min(0)
+                    Integer totalQuantity,
 
-                @NotNull
-                Integer medicineCategoryId,
+                    @NotNull
+                    Integer medicineCategoryId,
 
-                @Size(max = 100)
-                String createdBy,
+                    @Size(max = 100)
+                    String createdBy,
 
-                @Size(max = 100)
-                String modifiedBy
-        ) {}
+                    @Size(max = 100)
+                    String modifiedBy
+            ) {}
 
-        public record MedicineResponse(
-                Long medicineId,
-                String medicineName,
-                String brandName,
-                String medicineType,
-                String preciseGenericName,
-                String commercialBrandName,
-                BigDecimal price,
-                String unitOfMeasure,
-                String taxCategory,
-                BigDecimal gstPercent,
-                Integer totalQuantity,
-                Integer typesId,
-                Integer medicineCategoryId,
-                String medicineCategoryName,
-                String createdBy,
-                LocalDateTime createdAt,
-                String modifiedBy,
-                LocalDateTime modifiedAt,
-                Boolean isDeleted
-        ) {}
+            public record MedicineResponse(
+                    Long medicineId,
+                    String medicineName,
+                    String brandName,
+                    String medicineType,
+                    String preciseGenericName,
+                    String commercialBrandName,
+                    BigDecimal price,
+                    String unitOfMeasure,
+                    String taxCategory,
+                    BigDecimal gstPercent,
+                    Integer totalQuantity,
+                    Integer medicineCategoryId,
+                    String medicineCategoryName,
+                    String createdBy,
+                    LocalDateTime createdAt,
+                    String modifiedBy,
+                    LocalDateTime modifiedAt,
+                    Boolean isDeleted
+            ) {}
 
-        // ---------- Request ----------
+
+
+// ---------- Request ----------
         public record DepartmentRequest(
 
                 @NotBlank(message = "CompanyDepartment name is required")
@@ -311,6 +299,7 @@ import java.time.LocalDateTime;
         ) {}
 
         // ---------- Request ----------
+        // ---------- Request ----------
         public record CompanyPersonRequest(
 
                 @NotBlank(message = "Full name is required")
@@ -329,8 +318,10 @@ import java.time.LocalDateTime;
 
                 LocalDate dateOfJoining,
 
-                @Size(max = 500)
-                String address,
+                // ❌ REMOVED: @Size(max = 500) String address;
+                // ✅ REPLACED WITH:
+                @NotNull(message = "City ID is required")
+                Integer cityId,
 
                 Boolean isActive,
 
@@ -341,6 +332,7 @@ import java.time.LocalDateTime;
         ) {}
 
         // ---------- Response ----------
+        // ---------- Response ----------
         public record CompanyPersonResponse(
                 Long personId,
                 String fullName,
@@ -348,7 +340,17 @@ import java.time.LocalDateTime;
                 String phoneNumber,
                 String designation,
                 LocalDate dateOfJoining,
-                String address,
+
+                // ❌ REMOVED: String address;
+                // ✅ REPLACED WITH full hierarchical address details:
+                Integer cityId,
+                String cityName,
+                Integer postalCode,
+                String districtName,
+                String stateName,
+                String countryName,
+                String fullAddress,          // e.g., "Baner Road, Pune, Pune, Maharashtra, India - 411045"
+
                 Boolean isActive,
                 Long departmentId,
                 String departmentName,

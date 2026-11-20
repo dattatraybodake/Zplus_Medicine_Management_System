@@ -19,11 +19,38 @@ public interface CompanyPersonRepository extends JpaRepository<CompanyPerson, Lo
 
     Optional<CompanyPerson> findByPersonIdAndIsDeletedFalse(Long personId);
 
-    @Query("SELECT p FROM CompanyPerson p LEFT JOIN FETCH p.department WHERE p.isDeleted = false")
+    // Fetch department + full city hierarchy
+    @Query("""
+           SELECT p FROM CompanyPerson p
+           LEFT JOIN FETCH p.department
+           LEFT JOIN FETCH p.city c
+           LEFT JOIN FETCH c.district d
+           LEFT JOIN FETCH d.state s
+           LEFT JOIN FETCH s.country
+           WHERE p.isDeleted = false
+           """)
     List<CompanyPerson> findAllWithDepartment();
 
-    @Query("SELECT p FROM CompanyPerson p LEFT JOIN FETCH p.department WHERE p.personId = :id AND p.isDeleted = false")
+    @Query("""
+           SELECT p FROM CompanyPerson p
+           LEFT JOIN FETCH p.department
+           LEFT JOIN FETCH p.city c
+           LEFT JOIN FETCH c.district d
+           LEFT JOIN FETCH d.state s
+           LEFT JOIN FETCH s.country
+           WHERE p.personId = :id AND p.isDeleted = false
+           """)
     Optional<CompanyPerson> findByIdWithDepartment(@Param("id") Long id);
 
-    List<CompanyPerson> findByDepartment_DepartmentIdAndIsDeletedFalse(Long departmentId);
+    @Query("""
+           SELECT p FROM CompanyPerson p
+           LEFT JOIN FETCH p.department
+           LEFT JOIN FETCH p.city c
+           LEFT JOIN FETCH c.district d
+           LEFT JOIN FETCH d.state s
+           LEFT JOIN FETCH s.country
+           WHERE p.department.departmentId = :departmentId AND p.isDeleted = false
+           """)
+    List<CompanyPerson> findByDepartment_DepartmentIdAndIsDeletedFalse(
+            @Param("departmentId") Long departmentId);
 }

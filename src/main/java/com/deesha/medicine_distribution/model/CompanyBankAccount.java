@@ -9,7 +9,16 @@ import lombok.ToString;
 @Entity
 @Getter
 @Setter
-@Table(name = "company_banks")
+@Table(name = "company_banks",
+        uniqueConstraints = {
+                // account number is unique ONLY within a company (two companies can
+                // legitimately hold the same number string in different banks)
+                @UniqueConstraint(
+                        name = "uk_company_bank_account_number",
+                        columnNames = {"company_id", "bank_account_number"}
+                )
+        }
+)
 public class CompanyBankAccount {
 
     @Id

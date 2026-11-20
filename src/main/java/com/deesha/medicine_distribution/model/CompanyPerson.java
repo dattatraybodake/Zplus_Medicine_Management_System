@@ -38,8 +38,11 @@ public class CompanyPerson {
     @Column(name = "date_of_joining")
     private LocalDate dateOfJoining;
 
-    @Column(name = "address", length = 500)
-    private String address;
+    // ❌ REMOVED: private String address;
+    // ✅ REPLACED WITH:
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "city_id")
+    private Cities city;
 
     @Column(name = "is_active", nullable = false)
     private Boolean isActive = true;

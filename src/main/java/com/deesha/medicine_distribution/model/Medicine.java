@@ -66,8 +66,8 @@ public class Medicine {
     @Column(name = "is_deleted", nullable = false)
     private Boolean isDeleted = false;
 
-    // -------- Foreign Keys --------
+    // -------- Foreign Key --------
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "medicine_category_id")
-    private MedicineCategories medicineCategory; // If you have a MedicineType entity, replace with @ManyToOne
+    private MedicineCategories medicineCategory;
 }
