@@ -1,10 +1,8 @@
 package com.deesha.medicine_distribution.controller;
 
-import com.deesha.medicine_distribution.dto.LoginRequest;
-import com.deesha.medicine_distribution.dto.LoginResponse;
+
 import com.deesha.medicine_distribution.model.UserModel;
 import com.deesha.medicine_distribution.service.UserService;
-import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,35 +63,33 @@ public class UserController
         }
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest loginRequest)
-    {
-        LoginResponse loginResponse = userService.login(loginRequest);
-        return ResponseEntity.ok(loginResponse);
+//    @PostMapping("/login")
+//    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest loginRequest)
+//    {
+//        LoginResponse loginResponse = userService.login(loginRequest);
+//        return ResponseEntity.ok(loginResponse);
+//    }
+
+    @PutMapping("/update")
+    public ResponseEntity<Boolean> updateUser( @RequestBody UserModel userModel) {
+        Boolean updated = userService.updateUserMaster(userModel);
+        if (Boolean.TRUE.equals(updated)) {
+            return ResponseEntity.ok(true);
+        }
+        return ResponseEntity.badRequest().body(false);
     }
 
-//     Update user all details.
-//    @PutMapping("/update")
-//    public ResponseEntity<Boolean> updateUser( @RequestBody UserModel userModel) {
-//        Boolean updated = userService.updateUserMaster(userModel);
-//        if (Boolean.TRUE.equals(updated)) {
-//            return ResponseEntity.ok(true);
-//        }
-//        return ResponseEntity.badRequest().body(false);
-//    }
+    @PatchMapping("/update/{userId}")
+    public ResponseEntity<?> patchUser(@PathVariable("userId") Integer userId, @RequestBody UserModel userModel) {
+        try {
+            UserModel updated = userService.patchUser(userId, userModel);
+            return ResponseEntity.ok(updated);
+        } catch (RuntimeException e) {
+            logger.error("Patch failed for user {}: {}", userId, e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
 
-    // PATCH: partial update (only the fields sent in the body are changed)
-//    @PatchMapping("/update/{userId}")
-//    public ResponseEntity<?> patchUser(@PathVariable("userId") Integer userId, @RequestBody UserModel userModel) {
-//        try {
-//            UserModel updated = userService.patchUser(userId, userModel);
-//            return ResponseEntity.ok(updated);
-//        } catch (RuntimeException e) {
-//            logger.error("Patch failed for user {}: {}", userId, e.getMessage());
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-//        }
-
-//    }
+    }
 
     @DeleteMapping("/delete/{userId}")
     public ResponseEntity<?> deleteUser(@PathVariable("userId") Integer userId) {

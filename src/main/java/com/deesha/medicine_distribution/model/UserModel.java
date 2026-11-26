@@ -6,34 +6,32 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "users")
-@ToString(exclude = {"role", "password"})
+@Getter
+@Setter
 public class UserModel {
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
-    @Column(name="user_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id", nullable = false)
     private Integer userId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "role_id")
     private UserRoles role;
 
-    @Column(name = "full_name")
+    @Column(name = "full_name", nullable = false)
     private String fullName;
 
-    @Column(name = "email", unique = true)
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
 
-    @Column(name = "contact_number")
+    @Column(name = "contact_number", nullable = false, unique = true)
     private String contactNumber;
 
-    @Column(name = "username", unique = true)
+    @Column(name = "username", nullable = false, unique = true)
     private String userName;
 
-    @Column(name = "password")
+    @Column(name = "password", nullable = false)
     private String password;
-
-    @Column(name = "repeat_password")
-    private String repeatPassword;
 
     @Column(name = "is_active")
     private Boolean isActive = true;
@@ -41,113 +39,34 @@ public class UserModel {
     @Column(name = "last_login_at")
     private LocalDateTime lastLogin;
 
-    @Column(name = "created_at", updatable = false)
-    private LocalDateTime created;
+    @Column(name = "created_by")
+    private String createdBy;
 
-    @Column(name = "modified_at", updatable = false)
-    private LocalDateTime modified;
+    @Column(name = "created_date", updatable = false)
+    private LocalDateTime created;
 
     @PrePersist
     public void onCreate() {
         this.created = LocalDateTime.now();
     }
 
+    @Column(name = "modified_by")
+    private String modifiedBy;
+
+    @Column(name = "modified_date")
+    private LocalDateTime modified;
+
+    @PreUpdate
+    public void onUpdate() {
+        this.modified = LocalDateTime.now();
+    }
+
+    @Column(name = "deleted_by")
+    private String datetedBy;
+
+    @Column(name = "deleted_date")
+    private LocalDateTime deleted;
+
     public UserModel() {
-    }
-
-    public Integer getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
-
-    public UserRoles getRole() {
-        return role;
-    }
-
-    public void setRole(UserRoles role) {
-        this.role = role;
-    }
-
-    public String getFullName() {
-        return fullName;
-    }
-
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getContactNumber() {
-        return contactNumber;
-    }
-
-    public void setContactNumber(String contactNumber) {
-        this.contactNumber = contactNumber;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getRepeatPassword() {
-        return repeatPassword;
-    }
-
-    public void setRepeatPassword(String repeatPassword) {
-        this.repeatPassword = repeatPassword;
-    }
-
-    public Boolean getActive() {
-        return isActive;
-    }
-
-    public void setActive(Boolean active) {
-        isActive = active;
-    }
-
-    public LocalDateTime getLastLogin() {
-        return lastLogin;
-    }
-
-    public void setLastLogin(LocalDateTime lastLogin) {
-        this.lastLogin = lastLogin;
-    }
-
-    public LocalDateTime getCreated() {
-        return created;
-    }
-
-    public void setCreated(LocalDateTime created) {
-        this.created = created;
-    }
-
-    public LocalDateTime getModified() {
-        return modified;
-    }
-
-    public void setModified(LocalDateTime modified) {
-        this.modified = modified;
     }
 }

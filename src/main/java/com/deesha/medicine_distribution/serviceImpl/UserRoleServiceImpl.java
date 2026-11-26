@@ -15,7 +15,7 @@ public class UserRoleServiceImpl implements UserRoleService {
 
     @Override
     public boolean saveRoles(UserRoles userRoles) {
-        return userRolesRepository.save(userRoles)!=null;
+        return userRolesRepository.save(userRoles) != null;
     }
 
     @Override
@@ -24,9 +24,29 @@ public class UserRoleServiceImpl implements UserRoleService {
     }
 
     @Override
+    public UserRoles findRoleById(Integer roleId) {
+        return userRolesRepository.findById(roleId)
+                .orElseThrow(() -> new RuntimeException("Role not found with id: " + roleId));
+    }
+
+    @Override
+    public UserRoles updateRole(Integer roleId, UserRoles userRoles) {
+        UserRoles existingRole = userRolesRepository.findById(roleId)
+                .orElseThrow(() -> new RuntimeException("Role not found with id: " + roleId));
+
+        existingRole.setRoleName(userRoles.getRoleName());
+        existingRole.setDiscription(userRoles.getDiscription());
+        if (userRoles.getIsActive() != null) {
+            existingRole.setIsActive(userRoles.getIsActive());
+        }
+
+        return userRolesRepository.save(existingRole);
+    }
+
+    @Override
     public void deleteRole(Integer roleId) {
-        UserRoles roles = userRolesRepository.findById(roleId)
-                .orElseThrow(() -> new RuntimeException("Roles is not found" + roleId));
-        userRolesRepository.delete(roles);
+        UserRoles role = userRolesRepository.findById(roleId)
+                .orElseThrow(() -> new RuntimeException("Role not found with id: " + roleId));
+        userRolesRepository.delete(role);
     }
 }

@@ -10,4 +10,6 @@ import lombok.Data;
 public class LoginResponse {
     String message;
     Boolean flag;
+    Integer roleId;
+    LocalDateTime lastLogin;
 }

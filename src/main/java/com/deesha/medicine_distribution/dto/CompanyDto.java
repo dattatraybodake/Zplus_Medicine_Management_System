@@ -179,6 +179,7 @@ import java.time.LocalDateTime;
                 String modifiedBy,
                 LocalDateTime modifiedAt
         ) {}
+
             // ---------- Medicine category ----------
         public record CategoryRequest(
                     @NotBlank

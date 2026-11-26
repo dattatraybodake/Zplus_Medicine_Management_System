@@ -49,4 +49,5 @@ public interface CompaniesRepository extends JpaRepository<ManufactureCompany, L
     List<ManufactureCompany> findAllByEnterpriseType_EnterpriseTypeIdAndDeletedAtIsNull(
             Integer enterpriseTypeId
     );
+
 }

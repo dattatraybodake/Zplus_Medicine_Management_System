@@ -6,7 +6,14 @@ import java.util.List;
 
 public interface UserRoleService {
 
-    boolean saveRoles(UserRoles userroles);
+    boolean saveRoles(UserRoles userRoles);
+
     List<UserRoles> viewAllRoles();
-    public void deleteRole(Integer roleId);
+
+    UserRoles findRoleById(Integer roleId);
+
+    UserRoles updateRole(Integer roleId, UserRoles userRoles);
+
+    void deleteRole(Integer roleId);
+
 }

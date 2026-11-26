@@ -23,13 +23,11 @@ public class ManufactureCompany {
     @Column(name = "company_id")
     private Long companyId;
 
-    // -------- Foreign Key: Enterprise Type --------
     @NotNull(message = "Enterprise type is required")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "enterprise_type_id", nullable = false)
     private EnterpriseType enterpriseType;
 
-    // -------- Core fields with validation --------
     @NotBlank(message = "Company name is required")
     @Size(max = 150, message = "Company name must not exceed 150 characters")
     @Column(name = "company_name", nullable = false, length = 150)
@@ -56,7 +54,6 @@ public class ManufactureCompany {
     @Column(name = "website", length = 150)
     private String website;
 
-    // -------- Dates --------
     @PastOrPresent(message = "Company start date cannot be in the future")
     @Column(name = "company_start_date")
     private LocalDate companyStartDate;
@@ -64,35 +61,24 @@ public class ManufactureCompany {
     @Column(name = "company_end_date")
     private LocalDate companyEndDate;
 
-    // -------- Status --------
     @Column(name = "is_active", nullable = false)
     private boolean active = true;
 
-    // -------- Joins: one company -> many addresses --------
     @ToString.Exclude
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CompanyAddress> addresses = new ArrayList<>();
 
-    // -------- Joins: one company -> many bank accounts --------
     @ToString.Exclude
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CompanyBankAccount> bankAccounts = new ArrayList<>();
 
-    // -------- Joins: one company -> many licenses --------
     @ToString.Exclude
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CompanyLicenses> licenses = new ArrayList<>();   // ✅ matches entity name
 
-    // -------- Joins: one company -> many people --------
     @ToString.Exclude
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CompanyPerson> people = new ArrayList<>();
-
-    // -------- Joins: one company -> many medicines (if medicines belong to a company) --------
-    // Uncomment if your Medicine entity has a `company` FK
-    // @ToString.Exclude
-    // @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)
-    // private List<Medicine> medicines = new ArrayList<>();
 
     // -------- Audit --------
     @Size(max = 100)
